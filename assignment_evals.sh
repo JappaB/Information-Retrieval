@@ -14,11 +14,12 @@ for file in run/*; do
     fi
 
     #./trec_eval/trec_eval -q ap_88_89/qrel_test run/TF-IDF.run | grep -E "^map\s"
+
     echo $(./trec_eval/trec_eval "$arg0" "$qrel" "$file") >> temp.txt
     xargs -n3 < temp.txt >> $filename
     cp /dev/null temp.txt
-    grep -E "^map\s|^P_5\s" $filename >> $filename.temp
-    mv $filename.temp $filename
+    #grep -E "^map\s|^P_5\s|^num_rel\s|^num_rel_ret\s" $filename >> $filename.temp
+    #mv $filename.temp $filename
 
 done
 rm temp.txt
