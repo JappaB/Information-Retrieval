@@ -1,20 +1,25 @@
 #!/usr/bin/env bash
 
-qrel=ap_88_89/qrel_test
 arg0="-q"
 touch temp.txt
+
 for file in run/*; do
 
+    qrel=ap_88_89/qrel_test
     echo "Running TREC-eval on: $file"
 
     filename="${file//.run/}".txt
-    if [[ -e "$filename" ]]; then
-        echo "File $filename already exists, rename: $file. Skipping..."
-        break
+    if [[ -e "$filename" ]] || [[ ${file:(-4)} == ".txt" ]] ; then
+        len=${#file}
+        echo "TREC-eval file for ${file::len-4} already exists, skipping..."
+        continue
     fi
 
-    #./trec_eval/trec_eval -q ap_88_89/qrel_test run/TF-IDF.run | grep -E "^map\s"
+    if [[ $file = *"validation"* ]]; then
+        qrel=ap_88_89/qrel_validation
+    fi
 
+    # Retrieves standard TREC output and filters for MAP, P@5 and standard stats:
     echo $(./trec_eval/trec_eval "$arg0" "$qrel" "$file") >> temp.txt
     xargs -n3 < temp.txt >> $filename.temp
     cp /dev/null temp.txt
