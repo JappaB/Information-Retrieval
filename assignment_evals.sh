@@ -3,9 +3,9 @@
 arg0="-q"
 touch temp.txt
 
-for file in new_plm_run/*; do
+for file in letor_run/*; do
 
-    qrel=ap_88_89/qrel_validation
+    qrel=ap_88_89/qrel_test
     echo "Running TREC-eval on: $file"
 
     filename="${file//.run/}".txt
